@@ -1,7 +1,14 @@
-<div class="container">
-  <h1>My FirstApp</h1>
-  <p>Welcome to angular the complete guide!, course performed by SESP13</p>
-  <p>Let's test NgModel in action!</p>
-  <input type="text" [(ngModel)]="name" />
-  <p>{{ name }}</p>
+<div class="container pt-5">
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>I'm the AppComponent!</h3>
+      <hr />
+      <app-servers></app-servers>
+      <!-- <div app-servers></div> -->
+      <!-- <div class="app-servers"></div> -->
+      <app-success-alert></app-success-alert>
+      <app-danger-alert></app-danger-alert>
+
+    </div>
+  </div>
 </div>
