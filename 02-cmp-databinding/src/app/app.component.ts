@@ -9,8 +9,6 @@ import { ServerModel } from "./models/server.model";
 export class AppComponent {
   serverElements: ServerModel[] = [
     { type: "server", name: "Test Server", content: "Just a test!" },
-    { type: "server", name: "Test Server", content: "Just a test!" },
-    { type: "server", name: "Test Server", content: "Just a test!" },
   ];
 
   onServerAdded(serverData: ServerModel) {
@@ -27,5 +25,13 @@ export class AppComponent {
       name: bluePrintData.name,
       content: bluePrintData.content,
     });
+  }
+
+  onChangeFirst() {
+    this.serverElements[0].name = "Server Name changed!";
+  }
+
+  onDestroyFirst() {
+    this.serverElements.splice(0, 1);
   }
 }
