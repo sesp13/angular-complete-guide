@@ -7,12 +7,8 @@ export type NavigationPage = 'recipes' | 'shopping';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  @Output() onNavigation = new EventEmitter<NavigationPage>();
   constructor() {}
 
   ngOnInit(): void {}
 
-  navigate(page: NavigationPage) {
-    this.onNavigation.emit(page);
-  }
 }

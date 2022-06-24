@@ -6,10 +6,4 @@ import { NavigationPage } from './header/header.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  currentPage: NavigationPage = 'recipes';
-  
-  navigate(page: NavigationPage){
-    this.currentPage = page;
-  }
-}
+export class AppComponent {}
