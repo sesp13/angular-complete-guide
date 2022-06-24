@@ -8,9 +8,10 @@ import { BetterHighlightDirective } from './directives/better-highlight.directiv
 
 // Component
 import { AppComponent } from "./app.component";
+import { UnlessDirective } from './directives/unless.directive';
 
 @NgModule({
-  declarations: [AppComponent, BasicHighlightDirective, BetterHighlightDirective],
+  declarations: [AppComponent, BasicHighlightDirective, BetterHighlightDirective, UnlessDirective],
   imports: [BrowserModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

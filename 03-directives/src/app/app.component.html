@@ -6,7 +6,7 @@
       </button>
       <br /><br />
       <ul class="list-group">
-        <div *ngIf="onlyOdd">
+        <div *appUnless="!onlyOdd">
           <li
             *ngFor="let number of oddNumbers"
             class="list-group-item"
@@ -18,7 +18,7 @@
             {{ number }}
           </li>
         </div>
-        <div *ngIf="!onlyOdd">
+        <ng-template [ngIf]="!onlyOdd">
           <li
             *ngFor="let number of evenNumbers"
             class="list-group-item"
@@ -28,13 +28,21 @@
           >
             {{ number }}
           </li>
-        </div>
+        </ng-template>
       </ul>
 
       <p appBasicHighlight>Using basichighlight directive</p>
       <p appBetterHighlight defaultColor="yellow" highlightColor="orange">
         Using betterHighlight directive
       </p>
+
+      <div [ngSwitch]="value">
+        <p *ngSwitchCase="5">Value is 5</p>
+        <p *ngSwitchCase="5">Value is 10</p>
+        <p *ngSwitchCase="5">Value is 100</p>
+        <p *ngSwitchDefault>Value is default</p>
+      </div>
+
     </div>
   </div>
 </div>
