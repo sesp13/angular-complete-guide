@@ -17,5 +17,10 @@ export class ShoppingListComponent {
       amount: 10,
     },
   ];
+
   constructor() {}
+
+  addItem(ingredient: Ingredient) {
+    this.ingredients.push(ingredient);
+  }
 }
