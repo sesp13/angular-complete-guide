@@ -1,11 +1,21 @@
 <div class="row">
   <div class="col-xs-10">
-    <app-shopping-edit (onAddItem)="addItem($event)"></app-shopping-edit>
-    <hr>
-    <div class="list-group">
-      <a *ngFor="let ingredient of ingredients" href="#" class="list-group-item cursor-pointer">
+    <app-shopping-edit></app-shopping-edit>
+    <hr />
+    <div
+      *ngIf="ingredients.length > 0; else noIngredientsBlock"
+      class="list-group"
+    >
+      <a
+        *ngFor="let ingredient of ingredients"
+        href="#"
+        class="list-group-item cursor-pointer"
+      >
         {{ ingredient?.name }} ({{ ingredient?.amount }})
       </a>
     </div>
+    <ng-template #noIngredientsBlock>
+      <p>No Ingredients added to the cart</p>
+    </ng-template>
   </div>
 </div>

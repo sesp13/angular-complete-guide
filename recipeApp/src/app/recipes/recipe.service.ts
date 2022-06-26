@@ -5,24 +5,29 @@ import { Recipe } from './recipe.model';
   providedIn: 'root',
 })
 export class RecipeService {
-  
   recipeSelected = new EventEmitter<Recipe>();
-  
+
   private recipes: Recipe[] = [
     {
-      name: 'A test recipe',
-      description: 'This is simple a test',
-      imagePath:
-        'https://www.cookingclassy.com/wp-content/uploads/2022/05/bolognese-2.jpg',
+      name: 'Tasty Schitzel',
+      description: 'This is just awesome',
+      imagePath: 'https://cdn7.kiwilimon.com/recetaimagen/860/12668.jpg',
+      ingredients: [
+        { name: 'Meat', amount: 1 },
+        { name: 'French Fries', amount: 20 },
+      ],
     },
     {
-      name: 'Another test recipe',
-      description: 'This is simple a test',
+      name: 'Big Fat Burger',
+      description: 'What else you need to say?',
       imagePath:
-        'https://www.cookingclassy.com/wp-content/uploads/2022/05/bolognese-2.jpg',
+        'https://cdn-cmjom.nitrocdn.com/FpMsHpAgoVrRMnuAdmBhGkyiizdsWlSU/assets/static/optimized/rev-baa58a1/wp-content/uploads/2015/07/king-burger-541x633.png',
+      ingredients: [
+        { name: 'Buns', amount: 2 },
+        { name: 'Meat', amount: 1 },
+      ],
     },
   ];
-
 
   getRecipes(): Recipe[] {
     return [...this.recipes];
