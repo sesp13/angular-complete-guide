@@ -9,6 +9,7 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     {
+      id: '1',
       name: 'Tasty Schitzel',
       description: 'This is just awesome',
       imagePath: 'https://cdn7.kiwilimon.com/recetaimagen/860/12668.jpg',
@@ -18,6 +19,7 @@ export class RecipeService {
       ],
     },
     {
+      id: '2',
       name: 'Big Fat Burger',
       description: 'What else you need to say?',
       imagePath:
@@ -31,5 +33,14 @@ export class RecipeService {
 
   getRecipes(): Recipe[] {
     return [...this.recipes];
+  }
+
+  getRecipeById(id: string): Recipe | undefined {
+    const recipeFound = this.recipes.find((recipe) => recipe.id == id);
+    if (recipeFound) {
+      return { ...recipeFound };
+    } else {
+      return undefined;
+    }
   }
 }
