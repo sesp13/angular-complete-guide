@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
   providedIn: "root",
 })
 export class AuthService {
-  loggedIn: boolean = false;
+  loggedIn: boolean = true;
 
   isAuthenticated(): Promise<boolean> {
     return new Promise((resolve, reject) => {
