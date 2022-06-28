@@ -1,27 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Subscription } from "rxjs";
 
-import { ServersService } from '../servers.service';
+import { ServersService } from "../servers.service";
 
 @Component({
-  selector: 'app-edit-server',
-  templateUrl: './edit-server.component.html',
-  styleUrls: ['./edit-server.component.css']
+  selector: "app-edit-server",
+  templateUrl: "./edit-server.component.html",
+  styleUrls: ["./edit-server.component.css"],
 })
-export class EditServerComponent implements OnInit {
-  server: {id: number, name: string, status: string};
-  serverName = '';
-  serverStatus = '';
+export class EditServerComponent implements OnInit, OnDestroy {
+  server: { id: number; name: string; status: string };
+  serverName = "";
+  serverStatus = "";
+  querySub?: Subscription;
+  fragmentSub?: Subscription;
 
-  constructor(private serversService: ServersService) { }
+  constructor(
+    private serversService: ServersService,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.server = this.serversService.getServer(1);
     this.serverName = this.server.name;
     this.serverStatus = this.server.status;
+
+    this.handleParams();
+  }
+
+  ngOnDestroy(): void {
+    this.querySub?.unsubscribe();
+    this.fragmentSub?.unsubscribe();
   }
 
   onUpdateServer() {
-    this.serversService.updateServer(this.server.id, {name: this.serverName, status: this.serverStatus});
+    this.serversService.updateServer(this.server.id, {
+      name: this.serverName,
+      status: this.serverStatus,
+    });
   }
 
+  handleParams() {
+    // shapshot
+    console.log("snapshot", this.route.snapshot.queryParams);
+    console.log("snapshot", this.route.snapshot.fragment);
+
+    // Reactive way
+    this.querySub = this.route.queryParams.subscribe((value) =>
+      console.log("reactive", value)
+    );
+    this.fragmentSub = this.route.fragment.subscribe((value) =>
+      console.log("reactive", value)
+    );
+  }
 }
