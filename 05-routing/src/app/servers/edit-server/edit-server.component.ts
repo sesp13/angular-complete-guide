@@ -13,6 +13,7 @@ export class EditServerComponent implements OnInit, OnDestroy {
   server: { id: number; name: string; status: string };
   serverName = "";
   serverStatus = "";
+  allowEdit: boolean = false;
   querySub?: Subscription;
   fragmentSub?: Subscription;
 
@@ -47,9 +48,10 @@ export class EditServerComponent implements OnInit, OnDestroy {
     console.log("snapshot", this.route.snapshot.fragment);
 
     // Reactive way
-    this.querySub = this.route.queryParams.subscribe((value) =>
-      console.log("reactive", value)
+    this.querySub = this.route.queryParams.subscribe(
+      (params) => (this.allowEdit = params["allowEdit"] === "1")
     );
+
     this.fragmentSub = this.route.fragment.subscribe((value) =>
       console.log("reactive", value)
     );
