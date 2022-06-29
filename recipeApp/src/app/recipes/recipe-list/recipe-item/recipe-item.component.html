@@ -1,4 +1,8 @@
-<a [routerLink]="[recipe?.id]" class="list-group-item mt-3 cursor-pointer">
+<a
+  [routerLink]="[recipe?.id]"
+  class="list-group-item mt-3 cursor-pointer"
+  routerLinkActive="active"
+>
   <div class="d-flex justify-content-between">
     <div class="pull-left">
       <h4 class="list-group-item-heading">{{ recipe?.name }}</h4>
