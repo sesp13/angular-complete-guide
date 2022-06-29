@@ -9,14 +9,9 @@ import { RecipeService } from './recipe.service';
   styleUrls: ['./recipes.component.scss'],
 })
 export class RecipesComponent implements OnInit, OnDestroy {
-  currentRecipe?: Recipe;
-  recipeSub?: Subscription;
-
-  constructor(private recipeService: RecipeService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-    this.recipeSub?.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 }

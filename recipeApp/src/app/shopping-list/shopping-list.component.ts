@@ -9,8 +9,9 @@ import { ShoppingListService } from './shopping-list.service';
   styleUrls: ['./shopping-list.component.scss'],
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
+  private ingredientsSub?: Subscription;
+  
   ingredients: Ingredient[] = [];
-  ingredientsSub?: Subscription;
 
   constructor(private shoppingListService: ShoppingListService) {}
 
