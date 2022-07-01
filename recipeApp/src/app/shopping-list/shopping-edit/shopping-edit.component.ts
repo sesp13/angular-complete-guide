@@ -1,4 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { Ingredient } from 'src/app/shared/models/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
 
 @Component({
@@ -6,27 +9,66 @@ import { ShoppingListService } from '../shopping-list.service';
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.scss'],
 })
-export class ShoppingEditComponent implements OnInit {
-  @ViewChild('nameInput') nameInput?: ElementRef;
-  @ViewChild('amountInput') amountInput?: ElementRef;
+export class ShoppingEditComponent implements OnInit, OnDestroy {
+  isEditMode: boolean = false;
+  editIndex?: number;
+  editItem?: Ingredient;
+
+  @ViewChild('shoppingForm') shoppingForm!: NgForm;
+
+  editSub?: Subscription;
 
   constructor(private shoppingListService: ShoppingListService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.enableEditMode();
+  }
 
-  addIngredient(): void {
-    const name: string | undefined = this.nameInput?.nativeElement?.value;
-    const amount: number | undefined = this.amountInput?.nativeElement?.value;
-    if (!name || !amount) return;
-    this.shoppingListService.addIngredient({ name, amount });
+  ngOnDestroy(): void {
+    this.editSub?.unsubscribe();
+  }
+
+  enableEditMode(): void {
+    this.editSub = this.shoppingListService.startedEditing.subscribe(
+      (index: number) => this.setEditForm(index)
+    );
+  }
+
+  setEditForm(index: number): void {
+    this.isEditMode = true;
+    this.editIndex = index;
+    this.editItem = this.shoppingListService.getIngredient(this.editIndex);
+    this.shoppingForm.setValue({
+      name: this.editItem.name,
+      amount: this.editItem.amount,
+    });
+  }
+
+  onSubmitForm(): void {
+    const value = this.shoppingForm.value;
+    const ingredient = {
+      name: value.name,
+      amount: value.amount,
+    };
+
+    if (this.isEditMode) {
+      if (this.editIndex !== undefined)
+        this.shoppingListService.updateIngredient(this.editIndex, ingredient);
+    } else {
+      this.shoppingListService.addIngredient(ingredient);
+    }
+
     this.clearForm();
   }
 
   clearForm(): void {
-    if (this.nameInput?.nativeElement?.value)
-      this.nameInput.nativeElement.value = null;
+    this.isEditMode = false;
+    this.shoppingForm.reset();
+  }
 
-    if (this.amountInput?.nativeElement?.value)
-      this.amountInput.nativeElement.value = null;
+  onDeleteIngredient(): void {
+    if (this.editIndex !== undefined)
+      this.shoppingListService.deleteIngredient(this.editIndex);
+    this.clearForm();
   }
 }
