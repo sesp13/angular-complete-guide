@@ -1,1 +1,77 @@
-<h2>{{ title }}</h2>
+<div class="row mb-5">
+  <div class="col-12">
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-12">
+          <button type="submit" class="btn btn-success me-2">Save</button>
+          <button type="button" class="btn btn-danger">Cancel</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              formControlName="name"
+              type="text"
+              id="name"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="imagePath">Image URL</label>
+            <input
+              formControlName="imagePath"
+              type="text"
+              id="imagePath"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <img
+            [src]="recipeForm.get('imagePath')!.value"
+            alt=""
+            class="w-100"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <label for="description">Desciption</label>
+          <textarea
+            formControlName="description"
+            name="description"
+            id="description"
+            rows="6"
+            class="form-control"
+          ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12" formArrayName="ingredients">
+          <div
+            *ngFor="let ingredientCtrl of []; let i = index"
+            class="row"
+          >
+            <div class="col-sm-8">
+              <input type="text" class="form-control" />
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control" />
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
