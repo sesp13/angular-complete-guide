@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 import { Recipe } from '../recipe.model';
@@ -25,7 +25,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private recipeService: RecipeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -100,6 +101,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     );
   }
 
+  deleteIngredient(index: number): void {
+    this.ingredientsArray.controls.splice(index, 1);
+  }
+
+  deleteAllIngredients(): void {
+   this.ingredientsArray.clear();
+  }
+
   onSubmit(): void {
     const recipe = this.recipeForm.value;
     if (this.isEditMode && this.id) {
@@ -107,5 +116,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     } else {
       this.recipeService.addRecipe(recipe);
     }
+  }
+
+  onCancel(): void {
+    this.router.navigate(['/recipes']);
   }
 }

@@ -27,7 +27,7 @@
                 class="dropdown-item cursor-pointer"
                 (click)="addIngredientsToCart()"
               >
-                Add Ingridients to shopping list
+                Add Ingredients to shopping list
               </a>
             </li>
             <li>
@@ -35,7 +35,7 @@
                 Edit Recipe
               </a>
             </li>
-            <li><a class="dropdown-item cursor-pointer">Delete Recipe</a></li>
+            <li><a class="dropdown-item cursor-pointer" (click)="onDeleteRecipe()">Delete Recipe</a></li>
           </ul>
         </div>
       </div>

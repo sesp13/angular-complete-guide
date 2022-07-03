@@ -10,7 +10,9 @@
           >
             Save
           </button>
-          <button type="button" class="btn btn-danger">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">
+            Cancel
+          </button>
         </div>
       </div>
       <div class="row">
@@ -43,7 +45,7 @@
         <div class="col-12">
           <img
             [src]="recipeForm.get('imagePath')!.value"
-            alt=""
+            [alt]="recipeForm.get('name')!.value"
             class="recipe-img"
           />
         </div>
@@ -74,12 +76,14 @@
             <div class="col-sm-2">
               <input
                 formControlName="amount"
-                type="text"
+                type="number"
                 class="form-control"
               />
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-danger">Delete</button>
+              <button class="btn btn-danger" (click)="deleteIngredient(i)">
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -88,10 +92,17 @@
         <div class="col-12">
           <button
             type="button"
-            class="btn btn-success"
+            class="btn btn-success me-2"
             (click)="addIngredient()"
           >
             Add Ingredient
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="deleteAllIngredients()"
+          >
+            Delete all ingredients
           </button>
         </div>
       </div>
