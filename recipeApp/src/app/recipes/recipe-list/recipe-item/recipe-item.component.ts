@@ -12,6 +12,7 @@ export class RecipeItemComponent implements OnInit {
     description: '',
     imagePath: '',
   };
+  @Input() recipeId: number = 0;
 
   constructor() {}
 

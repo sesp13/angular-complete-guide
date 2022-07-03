@@ -1,10 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
@@ -17,9 +12,8 @@ import { RecipeService } from '../recipe.service';
   styleUrls: ['./recipe-edit.component.scss'],
 })
 export class RecipeEditComponent implements OnInit, OnDestroy {
-  id?: string;
+  id?: number;
   isEditMode: boolean = false;
-  title: string = '';
   recipeForm!: FormGroup;
 
   paramsSub?: Subscription;
@@ -47,10 +41,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.id = id;
       if (id) {
         this.isEditMode = true;
-        this.title = `Edit recipe ${id}`;
       } else {
         this.isEditMode = false;
-        this.title = `New Recipe`;
       }
 
       this.initForm();
@@ -62,9 +54,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       this.getEditingRecipe();
 
     this.recipeForm = this.fb.group({
-      name: [name],
-      imagePath: [imagePath],
-      description: [description],
+      name: [name, [Validators.required]],
+      imagePath: [imagePath, [Validators.required]],
+      description: [description, [Validators.required]],
       ingredients: this.fb.array([]),
     });
 
@@ -89,15 +81,31 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   setRecipeIngredients(ingredients?: Ingredient[]): void {
     ingredients?.forEach((ingredient) => {
-      const group = this.fb.group({
-        name: ingredient.name,
-        amount: ingredient.amount,
-      });
-      this.ingredientsArray.push(group);
+      this.addIngredient(ingredient.name, ingredient.amount);
     });
   }
 
+  addIngredient(
+    name: string | null = null,
+    amount: number | null = null
+  ): void {
+    this.ingredientsArray.push(
+      this.fb.group({
+        name: [name, [Validators.required]],
+        amount: [
+          amount,
+          [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)],
+        ],
+      })
+    );
+  }
+
   onSubmit(): void {
-    console.log(this.recipeForm);
+    const recipe = this.recipeForm.value;
+    if (this.isEditMode && this.id) {
+      this.recipeService.updateRecipe(this.id, recipe);
+    } else {
+      this.recipeService.addRecipe(recipe);
+    }
   }
 }
