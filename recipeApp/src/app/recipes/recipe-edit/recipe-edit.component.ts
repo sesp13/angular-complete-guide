@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Ingredient } from 'src/app/shared/models/ingredient.model';
+import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
 @Component({
@@ -22,8 +24,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   paramsSub?: Subscription;
 
-  get ingredientsControls() {
-    return (<FormArray>this.recipeForm.get('ingredients')).controls;
+  get ingredientsArray(): FormArray {
+    return this.recipeForm.controls['ingredients'] as FormArray;
   }
 
   constructor(
@@ -56,36 +58,43 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   private initForm(): void {
-    let name: string | undefined = '';
-    let imagePath: string | undefined = '';
-    let description: string | undefined = '';
-    let ingredients = new FormArray([]);
-
-    if (this.isEditMode && this.id) {
-      const recipe = this.recipeService.getRecipeById(this.id);
-      name = recipe?.name;
-      imagePath = recipe?.imagePath;
-      description = recipe?.description;
-      if (recipe?.ingredients) {
-        recipe.ingredients.forEach((ingredient) => {
-          ingredients.push(
-            this.fb.group({
-              name: [ingredient.name],
-              amount: [ingredient.amount],
-            })
-          );
-        });
-      }
-    }
+    const { name, imagePath, description, ingredients } =
+      this.getEditingRecipe();
 
     this.recipeForm = this.fb.group({
       name: [name],
       imagePath: [imagePath],
       description: [description],
-      ingredients,
+      ingredients: this.fb.array([]),
     });
 
-    console.log(this.ingredientsControls);
+    this.setRecipeIngredients(ingredients);
+  }
+
+  getEditingRecipe(): Recipe {
+    const newRecipe: Recipe = {
+      name: '',
+      imagePath: '',
+      description: '',
+      ingredients: [],
+    };
+
+    if (this.isEditMode && this.id) {
+      const fecthedRecipe = this.recipeService.getRecipeById(this.id);
+      return fecthedRecipe !== undefined ? fecthedRecipe : newRecipe;
+    } else {
+      return newRecipe;
+    }
+  }
+
+  setRecipeIngredients(ingredients?: Ingredient[]): void {
+    ingredients?.forEach((ingredient) => {
+      const group = this.fb.group({
+        name: ingredient.name,
+        amount: ingredient.amount,
+      });
+      this.ingredientsArray.push(group);
+    });
   }
 
   onSubmit(): void {
