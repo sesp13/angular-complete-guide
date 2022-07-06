@@ -1,7 +1,12 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpEventType,
+  HttpHeaders,
+  HttpParams,
+} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 import { Post } from "./models/post.interface";
 
 @Injectable({ providedIn: "root" })
@@ -11,16 +16,22 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  savePost(postData: Post): Observable<Post> {
-    return this.http.post<Post>(this.postsUrl, postData);
+  savePost(postData: Post): Observable<any> {
+    return this.http.post<Post>(this.postsUrl, postData, {
+      observe: "response",
+    });
   }
 
   fetchPosts(): Observable<Post[]> {
+    let params = new HttpParams().set("print", "pretty");
+    params = params.append("custom", "key");
+
     return this.http
       .get<{ [key: string]: Post }>(this.postsUrl, {
         headers: new HttpHeaders({
           "custom-header": "hello",
         }),
+        params,
       })
       .pipe(
         map((responseData) => {
@@ -39,6 +50,18 @@ export class PostService {
   }
 
   deletePosts() {
-    return this.http.delete(this.postsUrl);
+    return this.http
+      .delete(this.postsUrl, { observe: "events", responseType: "text" })
+      .pipe(
+        tap((event) => {
+          console.log(event);
+          if (event.type === HttpEventType.Sent) {
+            // ...
+          }
+          if (event.type === HttpEventType.Response) {
+            console.log(event.body);
+          }
+        })
+      );
   }
 }

@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
 
   onCreatePost(postData: Post) {
     // Send Http request
-    this.postService.savePost(postData).subscribe(() => {
+    this.postService.savePost(postData).subscribe((response) => {
+      // Body
+      console.log(response.body);
       this.postForm.reset();
       this.fecthPosts();
     });
