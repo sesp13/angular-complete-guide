@@ -1,0 +1,2 @@
+# Environments config
+The app is setted up to work with the files `environment.secret.ts` for development and with `environment.secret.prod.ts` for production. Please create this files, the original files were left as a reference of the required variables
