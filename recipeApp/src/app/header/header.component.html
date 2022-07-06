@@ -44,8 +44,16 @@
             Manage
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item cursor-pointer">Save Data</a></li>
-            <li><a class="dropdown-item cursor-pointer">Fetch Data</a></li>
+            <li>
+              <a class="dropdown-item cursor-pointer" (click)="onSaveData()">
+                Save Data
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item cursor-pointer" (click)="onFecthData()">
+                Fetch Data
+              </a>
+            </li>
           </ul>
         </li>
       </ul>

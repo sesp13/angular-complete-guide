@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DataStorageService } from '../shared/services/data-storage.service';
 export type NavigationPage = 'recipes' | 'shopping';
 
 @Component({
@@ -7,8 +8,15 @@ export type NavigationPage = 'recipes' | 'shopping';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor() {}
+  constructor(private dataService: DataStorageService) {}
 
   ngOnInit(): void {}
 
+  onSaveData(): void {
+    this.dataService.storeRecipes().subscribe();
+  }
+
+  onFecthData(): void {
+    this.dataService.fetchRecipes().subscribe();
+  }
 }
