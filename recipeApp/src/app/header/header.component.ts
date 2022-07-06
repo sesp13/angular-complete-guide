@@ -1,4 +1,13 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { User } from '../auth/models/user.model';
 import { DataStorageService } from '../shared/services/data-storage.service';
 export type NavigationPage = 'recipes' | 'shopping';
 
@@ -7,10 +16,24 @@ export type NavigationPage = 'recipes' | 'shopping';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
-  constructor(private dataService: DataStorageService) {}
+export class HeaderComponent implements OnInit, OnDestroy {
+  isAuthenticated: boolean = false;
+  userSub?: Subscription;
 
-  ngOnInit(): void {}
+  constructor(
+    private authService: AuthService,
+    private dataService: DataStorageService
+  ) {}
+
+  ngOnInit(): void {
+    this.userSub = this.authService.userSubject.subscribe((user: User) => {
+      this.isAuthenticated = !user ? false : true;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.userSub?.unsubscribe();
+  }
 
   onSaveData(): void {
     this.dataService.storeRecipes().subscribe();

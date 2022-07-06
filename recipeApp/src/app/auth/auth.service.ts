@@ -4,21 +4,27 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AuthModel, AuthResponse } from './auth.model';
+import { AuthModel, AuthResponse } from './models/auth.model';
+import { User } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  userSubject = new Subject<User>();
+
+  constructor(private http: HttpClient) {
+    console.log(this.userSubject);
+  }
 
   signUp(model: AuthModel): Observable<AuthResponse> {
     const body = { ...model, returnSecureToken: true };
     const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
     const params = new HttpParams().set('key', environment.firebaseKey);
-    return this.http
-      .post<AuthResponse>(url, body, { params })
-      .pipe(catchError(this.handleError));
+    return this.http.post<AuthResponse>(url, body, { params }).pipe(
+      catchError((error) => this.handleError(error)),
+      tap((response) => this.handleAuthentication(response))
+    );
   }
 
   login(model: AuthModel): Observable<AuthResponse> {
@@ -26,9 +32,10 @@ export class AuthService {
     const url =
       'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
     const params = new HttpParams().set('key', environment.firebaseKey);
-    return this.http
-      .post<AuthResponse>(url, body, { params })
-      .pipe(catchError(this.handleError));
+    return this.http.post<AuthResponse>(url, body, { params }).pipe(
+      catchError((error) => this.handleError(error)),
+      tap((response) => this.handleAuthentication(response))
+    );
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
@@ -46,5 +53,18 @@ export class AuthService {
         break;
     }
     return throwError(() => errorMessage);
+  }
+
+  private handleAuthentication(responseData: AuthResponse) {
+    const expirationDate = new Date(
+      new Date().getTime() + +responseData.expiresIn * 1000
+    );
+    const user = new User(
+      responseData.email,
+      responseData.localId,
+      responseData.idToken,
+      expirationDate
+    );
+    this.userSubject.next(user);
   }
 }
