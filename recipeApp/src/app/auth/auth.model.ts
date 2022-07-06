@@ -9,4 +9,5 @@ export interface AuthResponse {
   refreshToken?: string;
   expiresIn?: string;
   localId?: string;
+  registered?: boolean;
 }

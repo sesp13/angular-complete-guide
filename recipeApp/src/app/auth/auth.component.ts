@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { AuthModel, AuthResponse } from './auth.model';
 import { AuthService } from './auth.service';
 
 @Component({
@@ -9,6 +11,9 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent implements OnInit {
   isLoginMode: boolean = true;
+  isLoading: boolean = false;
+  error?: string = undefined;
+  authObservable?: Observable<AuthResponse>;
 
   constructor(private authService: AuthService) {}
 
@@ -20,18 +25,25 @@ export class AuthComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (form.invalid) return;
-    const { email, password } = form.value;
+    this.isLoading = true;
+
     if (this.isLoginMode) {
+      this.authObservable = this.authService.login(form.value);
     } else {
-      this.authService.signUp({ email, password }).subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
+      this.authObservable = this.authService.signUp(form.value);
     }
+
+    this.authObservable.subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        console.log(response);
+      },
+      error: (errorMessage) => {
+        this.isLoading = false;
+        this.error = errorMessage;
+      },
+    });
+
     form.reset();
   }
 }

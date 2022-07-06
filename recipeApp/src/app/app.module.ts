@@ -21,6 +21,7 @@ import { HeaderComponent } from './header/header.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -28,14 +29,15 @@ import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.compon
     AuthComponent,
     DropdownDirective,
     HeaderComponent,
+    LoadingSpinnerComponent,
     RecipesComponent,
+    RecipeEditComponent,
+    RecipeDetailComponent,
     RecipeListComponent,
     RecipeItemComponent,
-    RecipeDetailComponent,
+    RecipeStartComponent,
     ShoppingEditComponent,
     ShoppingListComponent,
-    RecipeEditComponent,
-    RecipeStartComponent,
   ],
   imports: [
     BrowserModule,
