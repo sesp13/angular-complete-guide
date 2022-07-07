@@ -4,6 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthModel, AuthResponse } from './models/auth.model';
@@ -12,8 +13,9 @@ import { User } from './models/user.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   userSubject = new BehaviorSubject<User | null>(null);
+  private tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   signUp(model: AuthModel): Observable<AuthResponse> {
     const body = { ...model, returnSecureToken: true };
@@ -34,6 +36,38 @@ export class AuthService {
       catchError((error) => this.handleError(error)),
       tap((response) => this.handleAuthentication(response))
     );
+  }
+
+  logout(): void {
+    this.userSubject.next(null);
+    localStorage.removeItem('userData');
+    this.router.navigate(['/auth']);
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+  }
+
+  autoLogin(): void {
+    const data: string | null = localStorage.getItem('userData');
+    if (!data) return;
+    const schema = JSON.parse(data);
+    const user: User = new User(
+      schema.email,
+      schema.id,
+      schema._token,
+      new Date(schema._tokenExpirationDate)
+    );
+    if (user.token) {
+      this.userSubject.next(user);
+      const expirationDuration = new Date(schema._tokenExpirationDate).getTime() - new Date().getTime();
+      this.autoLogout(expirationDuration);
+    }
+  }
+
+  autoLogout(duration: number): void {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, duration);
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
@@ -63,6 +97,8 @@ export class AuthService {
       responseData.idToken,
       expirationDate
     );
+    localStorage.setItem('userData', JSON.stringify(user));
+    this.autoLogout(+responseData.expiresIn * 1000);
     this.userSubject.next(user);
   }
 }
