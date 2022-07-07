@@ -11,7 +11,10 @@ export class DataStorageService {
   private baseUrl: string = `https://firestore-grpah-default-rtdb.firebaseio.com`;
   private recipesUrl = `${this.baseUrl}/recipes.json`;
 
-  constructor(private http: HttpClient, private recipeService: RecipeService) {}
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService
+  ) {}
 
   storeRecipes(): Observable<any> {
     const recipes: Recipe[] = this.recipeService.getRecipes();

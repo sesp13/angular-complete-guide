@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/models/user.model';
@@ -26,9 +20,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.userSub = this.authService.userSubject.subscribe((user: User) => {
-      this.isAuthenticated = !user ? false : true;
-    });
+    this.userSub = this.authService.userSubject.subscribe(
+      (user: User | null) => {
+        this.isAuthenticated = !user ? false : true;
+      }
+    );
   }
 
   ngOnDestroy(): void {

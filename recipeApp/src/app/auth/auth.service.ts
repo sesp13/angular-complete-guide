@@ -4,18 +4,16 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthModel, AuthResponse } from './models/auth.model';
 import { User } from './models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  userSubject = new Subject<User>();
+  userSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient) {
-    console.log(this.userSubject);
-  }
+  constructor(private http: HttpClient) {}
 
   signUp(model: AuthModel): Observable<AuthResponse> {
     const body = { ...model, returnSecureToken: true };
