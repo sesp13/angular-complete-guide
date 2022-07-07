@@ -11,8 +11,10 @@ import { DropdownDirective } from './shared/directives/dropdown.directive';
 
 // Services
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { PlaceHolderDirective } from './shared/directives/placeholder.directive';
 
 // Components
+import { AlertComponent } from './shared/alert/alert.component';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
@@ -28,11 +30,13 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 
 @NgModule({
   declarations: [
+    AlertComponent,
     AppComponent,
     AuthComponent,
     DropdownDirective,
     HeaderComponent,
     LoadingSpinnerComponent,
+    PlaceHolderDirective,
     RecipesComponent,
     RecipeEditComponent,
     RecipeDetailComponent,
@@ -49,11 +53,13 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     HttpClientModule,
     ReactiveFormsModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptorService,
-    multi: true
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
