@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // Modules
 import { AppRoutingModule } from './app-routing.module';
 import { RecipesModule } from './recipes/recipes.module';
+import { ShoppingListModule } from './shopping-list/shopping-list.module';
 
 // Directives
 import { DropdownDirective } from './shared/directives/dropdown.directive';
@@ -18,8 +19,6 @@ import { PlaceHolderDirective } from './shared/directives/placeholder.directive'
 import { AlertComponent } from './shared/alert/alert.component';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
-import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { HeaderComponent } from './header/header.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
@@ -34,8 +33,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     LoadingSpinnerComponent,
     PlaceHolderDirective,
     RecipeStartComponent,
-    ShoppingEditComponent,
-    ShoppingListComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -43,7 +41,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RecipesModule
+    RecipesModule,
+    ShoppingListModule
   ],
   providers: [
     {
