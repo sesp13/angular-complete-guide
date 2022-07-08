@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+// Modules
+import { ShoppingListRoutingModule } from './shopping-list-routing.module';
+
 // Components
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
-import { ShoppingListRoutingModule } from './shopping-list-routing.module';
 import { ShoppingListComponent } from './shopping-list.component';
 
 @NgModule({

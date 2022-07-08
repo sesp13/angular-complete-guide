@@ -32,8 +32,6 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     HeaderComponent,
     LoadingSpinnerComponent,
     PlaceHolderDirective,
-    RecipeStartComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -42,7 +40,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     HttpClientModule,
     ReactiveFormsModule,
     RecipesModule,
-    ShoppingListModule
+    ShoppingListModule,
   ],
   providers: [
     {
