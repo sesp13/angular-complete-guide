@@ -1,53 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 // Modules
+import { AuthModule } from './auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
-import { RecipesModule } from './recipes/recipes.module';
+import { CoreModule } from './core.module';
 import { ShoppingListModule } from './shopping-list/shopping-list.module';
-
-// Directives
-import { DropdownDirective } from './shared/directives/dropdown.directive';
-
-// Services
-import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { PlaceHolderDirective } from './shared/directives/placeholder.directive';
+import { RecipesModule } from './recipes/recipes.module';
 
 // Components
-import { AlertComponent } from './shared/alert/alert.component';
 import { AppComponent } from './app.component';
-import { AuthComponent } from './auth/auth.component';
 import { HeaderComponent } from './header/header.component';
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AlertComponent,
-    AppComponent,
-    AuthComponent,
-    DropdownDirective,
-    HeaderComponent,
-    LoadingSpinnerComponent,
-    PlaceHolderDirective,
-  ],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FormsModule,
     HttpClientModule,
-    ReactiveFormsModule,
+    AuthModule,
+    AppRoutingModule,
+    CoreModule,
     RecipesModule,
     ShoppingListModule,
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptorService,
-      multi: true,
-    },
+    SharedModule,
   ],
   bootstrap: [AppComponent],
 })
