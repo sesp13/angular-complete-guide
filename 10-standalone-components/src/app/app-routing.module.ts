@@ -5,11 +5,15 @@ import { WelcomeComponent } from './welcome/welcome.component';
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent },
-  { path: 'about', component: AboutComponent },
+  {
+    path: 'about',
+    loadComponent: () =>
+      import('./about/about.component').then((c) => c.AboutComponent),
+  },
   {
     path: 'dashboard',
     loadChildren: () =>
-      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      import('./dashboard/routes').then((file) => file.DASHBOARD_ROUTES),
   },
 ];
 
