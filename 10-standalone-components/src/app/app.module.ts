@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+/* 
+    * With an standalone root component the app module can be deleted
+*/
 
-import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
-import { DetailsComponent } from './welcome/details/details.component';
-import { WelcomeComponent } from './welcome/welcome.component';
+// import { NgModule } from '@angular/core';
+// import { BrowserModule } from '@angular/platform-browser';
 
-@NgModule({
-  declarations: [AppComponent, WelcomeComponent],
-  imports: [BrowserModule, SharedModule, DetailsComponent],
-  providers: [],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
+// import { AppComponent } from './app.component';
+// import { SharedModule } from './shared/shared.module';
+// import { WelcomeComponent } from './welcome/welcome.component';
+
+// @NgModule({
+//   declarations: [],
+//   imports: [BrowserModule, AppComponent, SharedModule, WelcomeComponent],
+//   providers: [],
+//   bootstrap: [],
+// })
+// export class AppModule {}
