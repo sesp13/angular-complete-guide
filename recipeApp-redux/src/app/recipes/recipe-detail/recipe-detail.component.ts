@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { ShoppingListService } from 'src/app/shopping-list/shopping-list.service';
 import { AddIngredients } from 'src/app/shopping-list/store/shopping-list.actions';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
@@ -20,7 +19,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   paramSub?: Subscription;
 
   constructor(
-    private shoppingListService: ShoppingListService,
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,

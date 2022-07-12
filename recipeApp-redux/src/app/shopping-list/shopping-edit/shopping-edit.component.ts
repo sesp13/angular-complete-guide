@@ -3,10 +3,8 @@ import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
-import { ShoppingListService } from '../shopping-list.service';
 import {
   AddIngredient,
-  ADD_INGREDIENT,
   deleteIngredient,
   StopEdit,
   UpdateIngredient,
@@ -27,7 +25,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editSub?: Subscription;
 
   constructor(
-    private shoppingListService: ShoppingListService,
     private store: Store<fromShoppingList.AppState>
   ) {}
 
