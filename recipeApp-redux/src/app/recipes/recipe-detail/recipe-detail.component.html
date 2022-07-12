@@ -1,0 +1,63 @@
+<div class="row" *ngIf="recipe; else noRecipeBlock">
+  <div class="col-md-6">
+    <img [src]="recipe?.imagePath" [alt]="recipe?.name" class="w-100" />
+  </div>
+  <div class="col-md-6">
+    <div class="row">
+      <div class="col-12">
+        <h1>{{ recipe?.name }}</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="dropdown">
+          <button
+            class="btn btn-primary dropdown-toggle"
+            type="button"
+            appDropdown
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Dropdown button
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li>
+              <a
+                class="dropdown-item cursor-pointer"
+                (click)="addIngredientsToCart()"
+              >
+                Add Ingredients to shopping list
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item cursor-pointer" (click)="onEditRecipe()">
+                Edit Recipe
+              </a>
+            </li>
+            <li><a class="dropdown-item cursor-pointer" (click)="onDeleteRecipe()">Delete Recipe</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">{{ recipe?.description }}</div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <ul class="list-group">
+          <li
+            *ngFor="let ingredient of recipe?.ingredients"
+            class="list-group-item"
+          >
+            {{ ingredient?.name }} - {{ ingredient?.amount }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noRecipeBlock>
+  <p>Recipe Not Found</p>
+</ng-template>

@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-xs-10">
+    <app-shopping-edit></app-shopping-edit>
+    <hr />
+    <div
+      *ngIf="ingredients.length > 0; else noIngredientsBlock"
+      class="list-group"
+    >
+      <a
+        *ngFor="let ingredient of ingredients; let i = index"
+        class="list-group-item cursor-pointer"
+        (click)="onEditItem(i)"
+      >
+        {{ ingredient?.name }} ({{ ingredient?.amount }})
+      </a>
+    </div>
+    <ng-template #noIngredientsBlock>
+      <p>No Ingredients added to the cart</p>
+    </ng-template>
+  </div>
+</div>

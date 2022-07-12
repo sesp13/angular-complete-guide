@@ -1,0 +1,70 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand cursor-pointer" [routerLink]="['/recipes']"
+      >Recipe Book</a
+    >
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li *ngIf="isAuthenticated" class="nav-item" routerLinkActive="active">
+          <a
+            class="nav-link cursor-pointer"
+            aria-current="page"
+            [routerLink]="['/recipes']"
+          >
+            Recipes
+          </a>
+        </li>
+        <li *ngIf="!isAuthenticated" class="nav-item" routerLinkActive="active">
+          <a class="nav-link cursor-pointer" [routerLink]="['/auth']">
+            Authenticate
+          </a>
+        </li>
+        <li class="nav-item" routerLinkActive="active">
+          <a class="nav-link cursor-pointer" [routerLink]="['/shopping-list']">
+            Shopping List
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li *ngIf="isAuthenticated" class="nav-item">
+          <a class="nav-link cursor-pointer" (click)="onLogout()"> Logout </a>
+        </li>
+        <li *ngIf="isAuthenticated" class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            appDropdown
+          >
+            Manage
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item cursor-pointer" (click)="onSaveData()">
+                Save Data
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item cursor-pointer" (click)="onFecthData()">
+                Fetch Data
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
