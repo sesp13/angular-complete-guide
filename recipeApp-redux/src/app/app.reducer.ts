@@ -1,5 +1,5 @@
 import { ActionReducerMap } from '@ngrx/store';
-import { authReducer, AuthState } from './auth/store/auth.actions';
+import { authReducer, AuthState } from './auth/store/auth.reducer';
 import {
   shoppingListReducer,
   ShoppingState,

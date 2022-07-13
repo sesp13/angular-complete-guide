@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
+import { AppState } from '../app.reducer';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/models/user.model';
+import { AuthState } from '../auth/store/auth.reducer';
 import { DataStorageService } from '../shared/services/data-storage.service';
 export type NavigationPage = 'recipes' | 'shopping';
 
@@ -16,15 +19,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private dataService: DataStorageService
+    private dataService: DataStorageService,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.userSub = this.authService.userSubject.subscribe(
-      (user: User | null) => {
+    this.userSub = this.store
+      .select('auth')
+      .pipe(map((state: AuthState) => state.user))
+      .subscribe((user: User | null) => {
         this.isAuthenticated = !user ? false : true;
-      }
-    );
+      });
   }
 
   ngOnDestroy(): void {
@@ -42,5 +47,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout(): void {
     this.authService.logout();
   }
-
 }

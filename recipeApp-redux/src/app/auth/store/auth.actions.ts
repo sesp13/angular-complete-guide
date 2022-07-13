@@ -1,12 +1,15 @@
+import { Action } from '@ngrx/store';
 import { User } from '../models/user.model';
 
-export interface AuthState {
-  user: User | null;
-}
-const initialState: AuthState = {
-  user: null,
-};
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
-export function authReducer(state: AuthState = initialState, action: any) {
-  return state;
+export class Login implements Action {
+  readonly type: string = LOGIN;
+  constructor(public payload: User) {}
+}
+
+export class Logout implements Action {
+  readonly type: string = LOGOUT;
+  payload = null;
 }
