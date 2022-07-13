@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { AddIngredients } from 'src/app/shopping-list/store/shopping-list.actions';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import * as fromShoppingList from 'src/app/shopping-list/store/shopping-list.reducer';
+import { AppState } from 'src/app/app.reducer';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -22,7 +22,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<fromShoppingList.AppState>
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {

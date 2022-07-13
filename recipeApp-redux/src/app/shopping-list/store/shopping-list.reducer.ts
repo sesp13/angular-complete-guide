@@ -14,10 +14,6 @@ export interface ShoppingState {
   editedIngredientIndex: number;
 }
 
-export interface AppState {
-  shoppingList: ShoppingState;
-}
-
 const initialState: ShoppingState = {
   ingredients: [
     { name: 'Apple', amount: 50 },
