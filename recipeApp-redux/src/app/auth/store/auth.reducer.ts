@@ -4,6 +4,8 @@ import {
   AUTHENTICATE_ERROR,
   LOGIN_START,
   LOGOUT,
+  SINGUP_START,
+  CLEAR_AUTH_ERROR,
 } from './auth.actions';
 
 export interface AuthState {
@@ -30,7 +32,8 @@ export function authReducer(state: AuthState = initialState, action: any) {
         loading: false,
       };
     }
-    case LOGIN_START: {
+    case LOGIN_START:
+    case SINGUP_START: {
       return {
         ...state,
         authError: null,
@@ -50,6 +53,12 @@ export function authReducer(state: AuthState = initialState, action: any) {
         ...state,
         user: null,
       };
+    }
+    case CLEAR_AUTH_ERROR: {
+      return {
+        ...state,
+        authError: null
+      }
     }
     default: {
       return state;

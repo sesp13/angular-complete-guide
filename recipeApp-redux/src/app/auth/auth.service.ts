@@ -1,17 +1,15 @@
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { throwError } from 'rxjs';
 import { AppState } from '../app.reducer';
-import { AuthModel, AuthResponse } from './models/auth.model';
+import { AuthResponse } from './models/auth.model';
 import { User } from './models/user.model';
-import { AuthenticateSuccess, Logout } from './store/auth.actions';
+import { AuthenticateSuccess } from './store/auth.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,29 +21,7 @@ export class AuthService {
     private store: Store<AppState>
   ) {}
 
-  signUp(model: AuthModel): Observable<AuthResponse> {
-    const body = { ...model, returnSecureToken: true };
-    const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
-    const params = new HttpParams().set('key', environment.firebaseKey);
-    return this.http.post<AuthResponse>(url, body, { params }).pipe(
-      catchError((error) => this.handleError(error)),
-      tap((response) => this.handleAuthentication(response))
-    );
-  }
-
-  login(model: AuthModel): Observable<AuthResponse> {
-    const body = { ...model, returnSecureToken: true };
-    const url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
-    const params = new HttpParams().set('key', environment.firebaseKey);
-    return this.http.post<AuthResponse>(url, body, { params }).pipe(
-      catchError((error) => this.handleError(error)),
-      tap((response) => this.handleAuthentication(response))
-    );
-  }
-
   logout(): void {
-    this.store.dispatch(new Logout());
     localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
     if (this.tokenExpirationTimer) {

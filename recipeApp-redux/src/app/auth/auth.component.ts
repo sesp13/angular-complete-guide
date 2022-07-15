@@ -15,7 +15,7 @@ import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceHolderDirective } from '../shared/directives/placeholder.directive';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
-import { LoginStart, SignupStart } from './store/auth.actions';
+import { CleanAuthError, LoginStart, SignupStart } from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
 
 @Component({
@@ -27,6 +27,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error?: string | null = undefined;
+  storeSub?: Subscription;
   @ViewChild(PlaceHolderDirective) alertHost!: PlaceHolderDirective;
   private closeSub?: Subscription;
 
@@ -37,7 +38,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.select('auth').subscribe((state: AuthState) => {
+    this.storeSub = this.store.select('auth').subscribe((state: AuthState) => {
       this.isLoading = state.loading;
       this.error = state.authError;
       if (this.error) this.showErrorAlert(this.error);
@@ -45,6 +46,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.storeSub?.unsubscribe();
     this.closeSub?.unsubscribe();
   }
 
@@ -66,7 +68,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError(): void {
-    this.error = undefined;
+    this.store.dispatch(new CleanAuthError());
   }
 
   private showErrorAlert(message: string): void {

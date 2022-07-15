@@ -18,6 +18,9 @@ import {
   LOGIN_START,
   SINGUP_START,
   SignupStart,
+  LOGOUT,
+  AUTO_LOGIN,
+  Logout,
 } from './auth.actions';
 @Injectable()
 export class AuthEffects {
@@ -37,6 +40,7 @@ export class AuthEffects {
       responseData.idToken,
       expirationDate
     );
+    localStorage.setItem('userData', JSON.stringify(user));
     return new AuthenticateSuccess(user);
   };
 
@@ -75,10 +79,10 @@ export class AuthEffects {
     )
   );
 
-  authSuccess = createEffect(
+  authRedirect = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AUTHENTICATE_SUCCESS),
+        ofType(AUTHENTICATE_SUCCESS, LOGOUT),
         tap(() => {
           this.router.navigate(['/']);
         })
@@ -98,6 +102,46 @@ export class AuthEffects {
           map((data: AuthResponse) => this.handleAuthentication(data)),
           catchError((errorResponse) => this.handleError(errorResponse))
         );
+      })
+    )
+  );
+
+  authLogout = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(LOGOUT),
+        tap(() => {
+          localStorage.removeItem('userData');
+        })
+      ),
+    {
+      dispatch: false,
+    }
+  );
+
+  autoLogin = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AUTO_LOGIN),
+      map(() => {
+        const data: string | null = localStorage.getItem('userData');
+        if (!data) return { type: 'DUMMY' };
+
+        const schema = JSON.parse(data);
+        const user: User = new User(
+          schema.email,
+          schema.id,
+          schema._token,
+          new Date(schema._tokenExpirationDate)
+        );
+        if (user.token) {
+          return new AuthenticateSuccess(user);
+          const expirationDuration =
+            new Date(schema._tokenExpirationDate).getTime() -
+            new Date().getTime();
+          // this.autoLogout(expirationDuration);
+        } else {
+          return { type: 'DUMMY' };
+        }
       })
     )
   );

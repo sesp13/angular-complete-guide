@@ -4,6 +4,7 @@ import { map, Subscription } from 'rxjs';
 import { AppState } from '../app.reducer';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/models/user.model';
+import { Logout } from '../auth/store/auth.actions';
 import { AuthState } from '../auth/store/auth.reducer';
 import { DataStorageService } from '../shared/services/data-storage.service';
 export type NavigationPage = 'recipes' | 'shopping';
@@ -18,7 +19,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSub?: Subscription;
 
   constructor(
-    private authService: AuthService,
     private dataService: DataStorageService,
     private store: Store<AppState>
   ) {}
@@ -45,6 +45,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout(): void {
-    this.authService.logout();
+    this.store.dispatch(new Logout());
   }
 }
