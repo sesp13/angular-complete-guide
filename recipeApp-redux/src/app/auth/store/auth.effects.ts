@@ -66,11 +66,12 @@ export class AuthEffects {
       ofType(LOGIN_START),
       switchMap((authData: LoginStart) => {
         const { email, password } = authData.payload;
+        const body = { email, password, returnSecureToken: true };
         const url =
           'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
         const params = new HttpParams().set('key', environment.firebaseKey);
         return this.http
-          .post<AuthResponse>(url, { email, password }, { params })
+          .post<AuthResponse>(url, body, { params })
           .pipe(
             map((data: AuthResponse) => this.handleAuthentication(data)),
             catchError((errorResponse) => this.handleError(errorResponse))
@@ -95,7 +96,7 @@ export class AuthEffects {
       ofType(SINGUP_START),
       switchMap((action: SignupStart) => {
         const { email, password } = action.payload;
-        const body = { email, password };
+        const body = { email, password, returnSecureToken: true };
         const url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
         const params = new HttpParams().set('key', environment.firebaseKey);
         return this.http.post<AuthResponse>(url, body, { params }).pipe(
