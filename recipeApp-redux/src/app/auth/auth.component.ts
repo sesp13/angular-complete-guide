@@ -13,6 +13,10 @@ import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceHolderDirective } from '../shared/directives/placeholder.directive';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
+import { LoginStart } from './store/auth.actions';
+import { AuthState } from './store/auth.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -22,21 +26,27 @@ import { PlaceHolderDirective } from '../shared/directives/placeholder.directive
 export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
-  error?: string = undefined;
-  authObservable?: Observable<AuthResponse>;
+  error?: string | null = undefined;
+  authObservable?: Observable<AuthState>;
   @ViewChild(PlaceHolderDirective) alertHost!: PlaceHolderDirective;
   private closeSub?: Subscription;
 
   constructor(
     private authService: AuthService,
-    private viewContainerRef: ViewContainerRef,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.select('auth').subscribe((state: AuthState) => {
+      this.isLoading = state.loading;
+      this.error = state.authError;
+      if (this.error) this.showErrorAlert(this.error);
+    });
+  }
 
   ngOnDestroy(): void {
-      this.closeSub?.unsubscribe();
+    this.closeSub?.unsubscribe();
   }
 
   onSwitchMode(): void {
@@ -48,22 +58,22 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     if (this.isLoginMode) {
-      this.authObservable = this.authService.login(form.value);
+      this.store.dispatch(new LoginStart(form.value));
     } else {
-      this.authObservable = this.authService.signUp(form.value);
+      // this.authObservable = this.authService.signUp(form.value);
     }
 
-    this.authObservable.subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.router.navigate(['/recipes']);
-      },
-      error: (errorMessage) => {
-        this.isLoading = false;
-        this.error = errorMessage;
-        this.showErrorAlert(this.error ?? '');
-      },
-    });
+    // this.authObservable.subscribe({
+    //   next: (response) => {
+    //     this.isLoading = false;
+    //     this.router.navigate(['/recipes']);
+    //   },
+    //   error: (errorMessage) => {
+    //     this.isLoading = false;
+    //     this.error = errorMessage;
+    //     this.showErrorAlert(this.error ?? '');
+    //   },
+    // });
 
     form.reset();
   }
