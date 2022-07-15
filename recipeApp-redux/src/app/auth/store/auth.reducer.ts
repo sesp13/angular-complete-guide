@@ -1,5 +1,10 @@
 import { User } from '../models/user.model';
-import { LOGIN, LOGIN_FAIL, LOGIN_START, LOGOUT } from './auth.actions';
+import {
+  AUTHENTICATE_SUCCESS,
+  AUTHENTICATE_ERROR,
+  LOGIN_START,
+  LOGOUT,
+} from './auth.actions';
 
 export interface AuthState {
   user: User | null;
@@ -15,7 +20,7 @@ const initialState: AuthState = {
 
 export function authReducer(state: AuthState = initialState, action: any) {
   switch (action.type) {
-    case LOGIN: {
+    case AUTHENTICATE_SUCCESS: {
       const { email, id, _token, _tokenExpirationDate } = action.payload;
       const user = new User(email, id, _token, _tokenExpirationDate);
       return {
@@ -32,7 +37,7 @@ export function authReducer(state: AuthState = initialState, action: any) {
         loading: true,
       };
     }
-    case LOGIN_FAIL: {
+    case AUTHENTICATE_ERROR: {
       return {
         ...state,
         user: null,

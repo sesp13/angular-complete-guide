@@ -15,7 +15,7 @@ import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceHolderDirective } from '../shared/directives/placeholder.directive';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
-import { LoginStart } from './store/auth.actions';
+import { LoginStart, SignupStart } from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
 
 @Component({
@@ -27,7 +27,6 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode: boolean = true;
   isLoading: boolean = false;
   error?: string | null = undefined;
-  authObservable?: Observable<AuthState>;
   @ViewChild(PlaceHolderDirective) alertHost!: PlaceHolderDirective;
   private closeSub?: Subscription;
 
@@ -60,20 +59,8 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.isLoginMode) {
       this.store.dispatch(new LoginStart(form.value));
     } else {
-      // this.authObservable = this.authService.signUp(form.value);
+      this.store.dispatch(new SignupStart(form.value));
     }
-
-    // this.authObservable.subscribe({
-    //   next: (response) => {
-    //     this.isLoading = false;
-    //     this.router.navigate(['/recipes']);
-    //   },
-    //   error: (errorMessage) => {
-    //     this.isLoading = false;
-    //     this.error = errorMessage;
-    //     this.showErrorAlert(this.error ?? '');
-    //   },
-    // });
 
     form.reset();
   }

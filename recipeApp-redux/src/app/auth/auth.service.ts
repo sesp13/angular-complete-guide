@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 import { AppState } from '../app.reducer';
 import { AuthModel, AuthResponse } from './models/auth.model';
 import { User } from './models/user.model';
-import { Login, Logout } from './store/auth.actions';
+import { AuthenticateSuccess, Logout } from './store/auth.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -64,7 +64,7 @@ export class AuthService {
       new Date(schema._tokenExpirationDate)
     );
     if (user.token) {
-      this.store.dispatch(new Login(user));
+      this.store.dispatch(new AuthenticateSuccess(user));
       const expirationDuration =
         new Date(schema._tokenExpirationDate).getTime() - new Date().getTime();
       this.autoLogout(expirationDuration);
@@ -106,6 +106,6 @@ export class AuthService {
     );
     localStorage.setItem('userData', JSON.stringify(user));
     this.autoLogout(+responseData.expiresIn * 1000);
-    this.store.dispatch(new Login(user));
+    this.store.dispatch(new AuthenticateSuccess(user));
   }
 }
