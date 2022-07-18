@@ -85,8 +85,8 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AUTHENTICATE_SUCCESS),
-        tap(() => {
-          this.router.navigate(['/']);
+        tap((action: AuthenticateSuccess) => {
+          if (action.redirect) this.router.navigate(['/']);
         })
       ),
     { dispatch: false }
@@ -142,7 +142,7 @@ export class AuthEffects {
             new Date(schema._tokenExpirationDate).getTime() -
             new Date().getTime();
           this.authService.setLogoutTimer(expirationDuration);
-          return new AuthenticateSuccess(user);
+          return new AuthenticateSuccess(user, false);
         } else {
           return { type: 'DUMMY' };
         }

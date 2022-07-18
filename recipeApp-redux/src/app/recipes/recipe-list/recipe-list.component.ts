@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
 import { RecipeState } from '../store/recipe.reducer';
 
 @Component({

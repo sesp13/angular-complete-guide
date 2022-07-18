@@ -6,7 +6,7 @@ import { map, Subscription, take } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
+import { AddRecipe, UpdateRecipe } from '../store/recipe.actions';
 import { RecipeState } from '../store/recipe.reducer';
 
 @Component({
@@ -27,7 +27,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private recipeService: RecipeService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store<AppState>
@@ -123,9 +122,9 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     const recipe = this.recipeForm.value;
     if (this.isEditMode && this.id) {
-      this.recipeService.updateRecipe(this.id, recipe);
+      this.store.dispatch(new UpdateRecipe({ index: this.id, recipe }));
     } else {
-      this.recipeService.addRecipe(recipe);
+      this.store.dispatch(new AddRecipe(recipe));
     }
   }
 

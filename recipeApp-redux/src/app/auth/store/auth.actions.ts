@@ -16,7 +16,7 @@ export const SINGUP_START = '[Auth] SINGUP_START';
 
 export class AuthenticateSuccess implements Action {
   readonly type: string = AUTHENTICATE_SUCCESS;
-  constructor(public payload: User) {}
+  constructor(public payload: User, public redirect: boolean = true) {}
 }
 
 export class AuthenticateError implements Action {

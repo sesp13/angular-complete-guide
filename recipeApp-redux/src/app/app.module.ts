@@ -7,17 +7,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core.module';
 
 // Ngrx
+import { AuthEffects } from './auth/store/auth.effects';
 import { AppReducer } from './app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipeEffects } from './recipes/store/recipe.effects';
 
 // Components
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
-import { Store, StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './auth/store/auth.effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -32,7 +33,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
       maxAge: 20,
     }),
     StoreRouterConnectingModule.forRoot(),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
   ],
   bootstrap: [AppComponent],
 })

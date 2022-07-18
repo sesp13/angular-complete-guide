@@ -2,11 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { AppState } from '../app.reducer';
-import { AuthService } from '../auth/auth.service';
 import { User } from '../auth/models/user.model';
 import { Logout } from '../auth/store/auth.actions';
 import { AuthState } from '../auth/store/auth.reducer';
-import { DataStorageService } from '../shared/services/data-storage.service';
+import { FetchRecipes, StoreRecipes } from '../recipes/store/recipe.actions';
 export type NavigationPage = 'recipes' | 'shopping';
 
 @Component({
@@ -19,7 +18,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSub?: Subscription;
 
   constructor(
-    private dataService: DataStorageService,
     private store: Store<AppState>
   ) {}
 
@@ -37,11 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSaveData(): void {
-    this.dataService.storeRecipes().subscribe();
+    this.store.dispatch(new StoreRecipes());
   }
 
   onFecthData(): void {
-    this.dataService.fetchRecipes().subscribe();
+    this.store.dispatch(new FetchRecipes());
   }
 
   onLogout(): void {
