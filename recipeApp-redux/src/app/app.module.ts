@@ -8,12 +8,13 @@ import { CoreModule } from './core.module';
 
 // Ngrx
 import { AppReducer } from './app.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 // Components
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
-import { StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
 
@@ -26,6 +27,9 @@ import { AuthEffects } from './auth/store/auth.effects';
     CoreModule,
     SharedModule,
     StoreModule.forRoot(AppReducer),
+    StoreDevtoolsModule.instrument({
+      maxAge: 20,
+    }),
     EffectsModule.forRoot([AuthEffects]),
   ],
   bootstrap: [AppComponent],
