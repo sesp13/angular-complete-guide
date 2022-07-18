@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { map, Subscription, take } from 'rxjs';
+import { AppState } from 'src/app/app.reducer';
 import { Ingredient } from 'src/app/shared/models/ingredient.model';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
+import { RecipeState } from '../store/recipe.reducer';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -26,7 +29,8 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private recipeService: RecipeService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -46,13 +50,23 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         this.isEditMode = false;
       }
 
-      this.initForm();
+      this.store
+        .select('recipes')
+        .pipe(
+          take(1),
+          map((state: RecipeState) => {
+            return this.id !== undefined ? state.recipes[this.id] : undefined;
+          })
+        )
+        .subscribe((fetchedRecipe?: Recipe) => {
+          this.initForm(fetchedRecipe);
+        });
     });
   }
 
-  private initForm(): void {
+  private initForm(fetchedRecipe?: Recipe): void {
     const { name, imagePath, description, ingredients } =
-      this.getEditingRecipe();
+      this.getEditingRecipe(fetchedRecipe);
 
     this.recipeForm = this.fb.group({
       name: [name, [Validators.required]],
@@ -64,19 +78,16 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     this.setRecipeIngredients(ingredients);
   }
 
-  getEditingRecipe(): Recipe {
-    const newRecipe: Recipe = {
-      name: '',
-      imagePath: '',
-      description: '',
-      ingredients: [],
-    };
-
-    if (this.isEditMode && this.id) {
-      const fecthedRecipe = this.recipeService.getRecipeById(this.id);
-      return fecthedRecipe !== undefined ? fecthedRecipe : newRecipe;
+  getEditingRecipe(recipe?: Recipe): Recipe {
+    if (recipe) {
+      return recipe;
     } else {
-      return newRecipe;
+      return {
+        name: '',
+        imagePath: '',
+        description: '',
+        ingredients: [],
+      };
     }
   }
 
@@ -106,7 +117,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   deleteAllIngredients(): void {
-   this.ingredientsArray.clear();
+    this.ingredientsArray.clear();
   }
 
   onSubmit(): void {
