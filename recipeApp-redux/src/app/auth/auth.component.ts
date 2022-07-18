@@ -1,14 +1,11 @@
 import {
   Component,
-  ComponentFactoryResolver,
   OnDestroy,
   OnInit,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { AuthModel, AuthResponse } from './models/auth.model';
+import { Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
