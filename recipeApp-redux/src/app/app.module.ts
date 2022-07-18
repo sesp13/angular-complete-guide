@@ -17,6 +17,7 @@ import { SharedModule } from './shared/shared.module';
 import { Store, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/store/auth.effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
@@ -30,6 +31,7 @@ import { AuthEffects } from './auth/store/auth.effects';
     StoreDevtoolsModule.instrument({
       maxAge: 20,
     }),
+    StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([AuthEffects]),
   ],
   bootstrap: [AppComponent],
